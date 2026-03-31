@@ -1,8 +1,7 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request, session, redirect
 import sys
 import pip
 import flask
-import os
 
 app = Flask(__name__)
 
@@ -14,6 +13,13 @@ def index():
         'pip_version': pip.__version__
     }
     return render_template('index.html', **context)
+
+@app.route('/test', methods = ['GET', 'GET'])
+def test():
+    if request.method == "POST":
+        return render_template('index.html')
+    else:
+        redirect('/')
 
 if __name__ == '__main__':
     app.run(debug=True)
