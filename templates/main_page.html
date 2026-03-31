@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Мессенджер - {{ acc }}</title>
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+    <style>
+        /* ... стили из предыдущего ответа ... */
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <div class="user-info">
+            <h3 id="account">{{ acc }}</h3>
+            <a href="/logout" class="logout-btn">Выйти</a>
+        </div>
+        <div class="chats" id="chats">
+            <div class="chat-item active" data-chat-id="1">
+                <div class="chat-name">Общий чат</div>
+                <div class="chat-last-message"></div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="main-chat">
+        <div class="chat-header">
+            <h2 id="current-chat-name">Общий чат</h2>
+        </div>
+        <div class="messages" id="messages"></div>
+        <div class="message-input-area">
+            <textarea class="message-input" id="message-input" placeholder="Введите сообщение..." rows="1"></textarea>
+            <button class="send-btn" id="send-btn">📤</button>
+        </div>
+    </div>
+    <script src="/static/js/main.js"></script>
+</body>
+</html>
