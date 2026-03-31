@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flask приветствие</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Добро пожаловать в Flask приложение!</h1>
+        
+        <div class="info">
+            <div class="info-item">
+                <span class="label">Версия Python:</span>
+                <span class="value">{{ python_version }}</span>
+            </div>
+            
+            <div class="info-item">
+                <span class="label">Версия Flask:</span>
+                <span class="value">{{ flask_version }}</span>
+            </div>
+            
+            <div class="info-item">
+                <span class="label">Версия pip:</span>
+                <span class="value">{{ pip_version }}</span>
+            </div>
+        </div>
+        
+        <p class="footer">Приветственная страница</p>
+    </div>
+</body>
+</html>
