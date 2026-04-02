@@ -5,6 +5,9 @@ from flask_mysqldb import MySQL
 from flask_socketio import SocketIO, emit
 from datetime import datetime
 import bcrypt
+import os
+import secrets
+import string
 
 app = Flask(__name__)
 
@@ -17,7 +20,13 @@ app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 
 mysql = MySQL(app)
 
-# Важно! Настройка CORS и async_mode
+def generate_chat_id(length : int = 16):
+    """
+    leinght: Длина генерируемого ключа, по умолчанию 16
+    """
+    alphabet = string.ascii_letters + string.digits
+    return ''.join(secrets.choice(alphabet) for _ in range(length))
+
 socketio = SocketIO(app, cors_allowed_origins="*", async_mode='threading')
 
 @app.route('/registration', methods=['POST'])
@@ -33,7 +42,7 @@ def reg():
     
     cursor = mysql.connection.cursor()
     try:
-        cursor.execute('INSERT INTO users (username, password) VALUES (%s, %s)', 
+        cursor.execute('INSERT INTO users (username, password, chats) VALUES (%s, %s, 1)', 
                       (username, hashed.decode('utf-8')))
         mysql.connection.commit()
         session['user'] = username
@@ -65,7 +74,13 @@ def auth():
 def main():
     if 'user' not in session:
         return redirect('/')
-    return render_template('main_page.html', acc=session['user'])
+    return render_template('main_page.html', acc=session['user'], chats = 
+            """
+            <div class="chat-item active" data-chat-id="1">
+                <div class="chat-name">Общий чат</div>
+                <div class="chat-last-message"></div>
+            </div>
+            """)
 
 @socketio.on('connect')
 def handle_connect():
@@ -87,22 +102,25 @@ def handle_send_message(data):
     
     # Сохраняем сообщение в БД (если есть таблица messages)
     try:
+        os.system('clear')
         cursor = mysql.connection.cursor()
         cursor.execute('''
-            INSERT INTO chats (user_id, message, chat_id) 
-            VALUES ((SELECT id FROM users WHERE username = %s), %s, %s)
-        ''', (user, message, chat_id))
+            INSERT INTO chats (user_id, message, chat_id, created_at) 
+            VALUES ((SELECT id FROM users WHERE username = %s), %s, %s, %s)
+        ''', (user, message, chat_id, str(datetime.now())))
         mysql.connection.commit()
         cursor.close()
     except Exception as e:
         print(f"Ошибка сохранения сообщения: {e}")
     
     # Отправляем сообщение всем клиентам
+    os.system("clear")
+    now = datetime.now()
     emit('new_message', {
         'user': user,
         'message': message,
         'chat_id': chat_id,
-        'timestamp': str(datetime.now())
+        'timestamp': now.strftime("%H:%M")
     }, broadcast=True)
 
 @app.route('/')
@@ -122,7 +140,7 @@ def get_messages(chat_id):
     
     cursor = mysql.connection.cursor()
     cursor.execute('''
-        SELECT m.*, u.username 
+        SELECT m.*, u.username
         FROM chats m 
         JOIN users u ON m.user_id = u.id 
         WHERE m.chat_id = %s 

@@ -27,6 +27,11 @@ body {
 .user-info {
     padding: 20px;
     border-bottom: 1px solid #e5e5e5;
+    height: 4em;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
 }
 
 .user-info h3 {
@@ -37,6 +42,7 @@ body {
 }
 
 .logout-btn {
+    height: fit-content;
     display: inline-block;
     padding: 6px 12px;
     background: transparent;
@@ -100,6 +106,7 @@ body {
     padding: 16px 20px;
     border-bottom: 1px solid #e5e5e5;
     background: #ffffff;
+    height: 4em;
 }
 
 .chat-header h2 {
@@ -125,6 +132,7 @@ body {
 
 /* Сообщения */
 .message {
+    height: fit-content;
     margin-bottom: 16px;
     display: flex;
     flex-direction: column;
@@ -132,6 +140,7 @@ body {
 
 .message.sent {
     align-items: flex-end;
+    max-width: 121em;
 }
 
 .message.received {
@@ -167,6 +176,7 @@ body {
 
 /* Поле ввода */
 .message-input-area {
+    width: 125em;
     padding: 16px 20px;
     border-top: 1px solid #e5e5e5;
     background: #ffffff;

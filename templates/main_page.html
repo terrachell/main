@@ -9,14 +9,11 @@
 <body>
     <div class="sidebar">
         <div class="user-info">
-            <h3 id="account">{{ acc }}</h3>
+            <p id="account">{{ acc }}</p>
             <a href="/logout" class="logout-btn">Выйти</a>
         </div>
         <div class="chats" id="chats">
-            <div class="chat-item active" data-chat-id="1">
-                <div class="chat-name">Общий чат</div>
-                <div class="chat-last-message"></div>
-            </div>
+            {{ chats | safe }}
         </div>
     </div>
     

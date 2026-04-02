@@ -19,7 +19,7 @@ const currentUser = account.innerHTML;
 
 // Подключение
 socket.on('connect', () => {
-    console.log('✅ Подключено к серверу, SID:', socket.id);
+    console.log('Подключено к серверу, SID:', socket.id);
     addSystemMessage('Подключено к чату');
     loadMessages(currentChat);
 });
@@ -29,15 +29,15 @@ socket.on('connected', (data) => {
 });
 
 socket.on('disconnect', () => {
-    console.log('❌ Отключено от сервера');
+    console.log('Отключено от сервера');
     addSystemMessage('Потеряно соединение. Переподключение...');
 });
 
 // Получение нового сообщения
 socket.on('new_message', (data) => {
-    console.log('📨 Новое сообщение:', data);
+    console.log('Новое сообщение:', data);
     if (data.chat_id === currentChat) {
-        addMessage(data.user, data.message, data.user === currentUser);
+        addMessage(data.user, data.message, data.user === currentUser, data.timestamp);
     }
     updateLastMessage(data.chat_id, data.user, data.message);
 });
@@ -52,7 +52,9 @@ function loadMessages(chatId) {
                 messagesContainer.innerHTML = '<div class="empty-state"><p>💬 Нет сообщений</p><p>Напишите первое сообщение</p></div>';
             } else {
                 messages.forEach(msg => {
-                    addMessage(msg.username, msg.message, msg.username === currentUser);
+                    console.log(msg)
+                    const created_at = msg.created_at.match(/(\d{2}):(\d{2})/)[0];
+                    addMessage(msg.username, msg.message, msg.username === currentUser, created_at);
                 });
             }
             messagesContainer.scrollTop = messagesContainer.scrollHeight;
@@ -68,7 +70,7 @@ function sendMessage() {
     const data = {
         user: currentUser,
         message: message,
-        chatid: currentChat
+        chatid: currentChat,
     };
     
     console.log('📤 Отправка:', data);
@@ -86,17 +88,14 @@ function sendMessage() {
 }
 
 // Добавление сообщения в DOM
-function addMessage(username, message, isSent) {
+function addMessage(username, message, isSent, created_at) {
     const emptyState = messagesContainer.querySelector('.empty-state');
     if (emptyState) emptyState.remove();
     
     const messageDiv = document.createElement('div');
     messageDiv.className = `message ${isSent ? 'sent' : 'received'}`;
-    
-    const time = new Date().toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
-    
     messageDiv.innerHTML = `
-        <div class="message-info">${username} • ${time}</div>
+        <div class="message-info">${username} • ${created_at}</div>
         <div class="message-bubble">${escapeHtml(message)}</div>
     `;
     
