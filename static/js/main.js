@@ -1,10 +1,9 @@
 // Подключаемся к серверу
-const socket = io('http://localhost:5001', {
+const socket = io({
     transports: ['websocket', 'polling'],
     reconnection: true,
     reconnectionAttempts: 5
 });
-
 
 let currentChat = 1;
 

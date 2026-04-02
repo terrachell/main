@@ -134,4 +134,4 @@ def get_messages(chat_id):
     return jsonify(messages)
 
 if __name__ == '__main__':
-    socketio.run(app, port=5001, debug=True)
+    socketio.run(app, port=5001, debug=True, host='0.0.0.0')
