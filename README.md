@@ -86,10 +86,12 @@ pip install -r requirements.txt
 
 Отредактируйте параметры подключения к БД в app.py:
 
+```python
 app.config['MYSQL_HOST'] = '127.0.0.1'
 app.config['MYSQL_USER'] = 'root'
 app.config['MYSQL_PASSWORD'] = 'your_password'
 app.config['MYSQL_DB'] = 'messager'
+```
 
 ### 6. Запуск проекта
 ```bash
