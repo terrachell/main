@@ -13,7 +13,7 @@ body {
     font-size: 14px;
     line-height: 1.4;
     color: #1a1a1a;
-    overflow-x: hidden;
+    overflow-x: visible;
 }
 
 /* Боковая панель */
@@ -132,11 +132,13 @@ body {
 }
 
 /* Сообщения */
+
 .message {
     height: fit-content;
     margin-bottom: 16px;
     display: flex;
     flex-direction: column;
+    width: 88vw;
 }
 
 .message.sent {
@@ -184,6 +186,7 @@ body {
     display: flex;
     gap: 12px;
     align-items: flex-end;
+    width: 91vw;
 }
 
 .message-input {
@@ -197,6 +200,7 @@ body {
     background: #ffffff;
     color: #1a1a1a;
     line-height: 1.4;
+    width: 88vw;
 }
 
 .message-input:focus {
