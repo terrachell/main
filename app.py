@@ -65,13 +65,18 @@ def auth():
 def main():
     if 'user' not in session:
         return redirect('/')
-    return render_template('main_page.html', acc=session['user'], chats = 
-            """
-            <div class="chat-item active" data-chat-id="1">
+    chats = """<div class="chat-item active" data-chat-id="1">
                 <div class="chat-name">Общий чат</div>
                 <div class="chat-last-message"></div>
-            </div>
-            """)
+            </div>"""
+    cursor = mysql.connection.cursor()
+    cursor.execute('SELECT * FROM `private_room` WHERE user0 = %s or user1 = %s', (session['user'], session['user'],))
+    chats_ = cursor.fetchall()
+    for chat in chats_:
+        chats += f"""<div class="chat-item" data-chat-id="1">
+        <div class="chat-name">{chat['user0']} - {chat['user1']}</div>
+        <div class="chat-last-message"></div></div>"""
+    return render_template('main_page.html', acc=session['user'], chats =  chats)
 
 @socketio.on('connect')
 def handle_connect():
