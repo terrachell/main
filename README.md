@@ -25,7 +25,7 @@
 
 ### `0.0.1`
 - Добавлены базовые файлы приложения через `create_flask`
-- Ссылка на приложение: https://github.com/terrachell/create_flask.git
+- Ссылка на приложение: https://github.com/terrachell/create_flask
 
 ### `0.0.2` (текущая)
 - Добавлены основные функции мессенджера:
