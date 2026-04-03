@@ -15,6 +15,9 @@
         <div class="chats" id="chats">
             {{ chats | safe }}
         </div>
+        <div>
+            <button id="create_new_chat" class="logout-btn">Создать чат</button>
+        </div>
     </div>
     
     <div class="main-chat">
@@ -26,6 +29,17 @@
             <textarea class="message-input" id="message-input" placeholder="Введите сообщение..." rows="1"></textarea>
             <button class="send-btn" id="send-btn">📤</button>
         </div>
+    </div>
+    <div class="dark-block" id="dark-block">
+        <div class="create-form-block">
+            <form action="/api/create_private_chat" method="post" class="create-form">
+                <h3>Создать приватный канал (1-на-1)</h3>
+                <label for="user1" class="create-form-label">Введите имя второго пользователя</label>
+                <input type="text" class="create-form-input" id="user1" name="user1">
+                <button type="submit" class="submit-btn">Создать</button>
+            </form>
+            <button id="cancel">X</button>
+        </div> 
     </div>
     <script src="/static/js/main.js"></script>
 </body>

@@ -8,6 +8,7 @@ const socket = io({
 let currentChat = 1;
 
 // DOM элементы
+const create_new_chat_btn = document.getElementById('create_new_chat');
 const messagesContainer = document.getElementById('messages');
 const messageInput = document.getElementById('message-input');
 const sendBtn = document.getElementById('send-btn');
@@ -147,6 +148,17 @@ document.querySelectorAll('.chat-item').forEach(chat => {
         loadMessages(currentChat);
     });
 });
+
+create_new_chat_btn.addEventListener('click', () => {
+    const dark_block = document.getElementById('dark-block');
+    const cancel = document.getElementById('cancel')
+    cancel.addEventListener('click', () => {
+        dark_block.style.display = 'none'
+    })
+    dark_block.style.display = 'flex'
+})
+
+
 
 // Приветствие
 addSystemMessage(`Добро пожаловать, ${currentUser}!`);
