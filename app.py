@@ -6,8 +6,7 @@ from flask_socketio import SocketIO, emit
 from datetime import datetime
 import bcrypt
 import os
-import secrets
-import string
+from static.crypter import *
 
 app = Flask(__name__)
 
@@ -19,14 +18,6 @@ app.config['MYSQL_HOST'] = '127.0.0.1'
 app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 
 mysql = MySQL(app)
-
-def generate_chat_id(length : int = 16):
-    """
-    leinght: Длина генерируемого ключа, по умолчанию 16
-    """
-    alphabet = string.ascii_letters + string.digits
-    return ''.join(secrets.choice(alphabet) for _ in range(length))
-
 socketio = SocketIO(app, cors_allowed_origins="*", async_mode='threading')
 
 @app.route('/registration', methods=['POST'])
@@ -150,6 +141,41 @@ def get_messages(chat_id):
     cursor.close()
     
     return jsonify(messages)
+
+@app.route('/api/create_private_chat', methods=['POST'])
+def create_private_chat():
+    user_id = session['user']
+    other_id = request.form.get('user1')
+    
+    # Сортируем ID
+    id1, id2 = sorted([user_id, other_id])
+    
+    cursor = mysql.connection.cursor()
+    
+    # Проверяем, есть ли уже чат
+    cursor.execute('SELECT hash FROM private_room WHERE user0 = %s AND user1 = %s', (id1, id2))
+    existing = cursor.fetchone()
+    # Проверяем есть ли тот пользователь, на которого указывает пользователь
+    cursor.execute('SELECT username FROM users WHERE username = %s', (other_id,))
+    user1 = cursor.fetchall()
+    os.system('clear')
+
+    if existing:
+        room_hash = existing['hash']
+    elif user1 and user1[0]['username'] != session['user']:
+        room_hash = generate_room_hash()
+        cursor.execute('''
+            INSERT INTO private_room (user0, user1, hash)
+            VALUES (%s, %s, %s)
+        ''', (id1, id2, room_hash))
+        mysql.connection.commit()
+    else:
+        return redirect('/main_page')
+    
+    cursor.close()
+    
+    #return jsonify({'room_hash': room_hash})
+    return redirect('/main_page')
 
 if __name__ == '__main__':
     socketio.run(app, port=5001, debug=True, host='0.0.0.0')
