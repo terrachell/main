@@ -7,14 +7,15 @@ from datetime import datetime
 import bcrypt
 import os
 from static.crypter import *
-
+os.system('clear')
 app = Flask(__name__)
 
 app.secret_key = 'secret'
-app.config['MYSQL_DB'] = 'messager'
-app.config['MYSQL_PASSWORD'] = '2005'
-app.config['MYSQL_USER'] = 'root'
+
 app.config['MYSQL_HOST'] = '127.0.0.1'
+app.config['MYSQL_DB'] = 'messager'
+app.config['MYSQL_USER'] = 'root'
+app.config['MYSQL_PASSWORD'] = '2005'
 app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 
 mysql = MySQL(app)
